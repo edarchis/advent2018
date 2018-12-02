@@ -1,4 +1,5 @@
 from collections import Counter
+from functools import reduce
 
 
 def has_doubles_and_triples(code):
@@ -7,6 +8,14 @@ def has_doubles_and_triples(code):
 
 
 def compute_code(codelist):
+    tot = reduce(
+        lambda x, y: (x[0] + y[0], x[1] + y[1]),
+        [has_doubles_and_triples(code) for code in codelist]
+    )
+    return tot[0] * tot[1]
+
+
+def other_compute_code(codelist):
     dubs = 0
     trips = 0
     for code in codelist:
