@@ -61,7 +61,7 @@ def sleep_minutes(siestas, guard=None):
     for siesta in siestas:
         if guard is None or guard == siesta.guard:
             for minute in list(range(siesta.sleep_from.minute, siesta.sleep_to.minute)):
-                guard_minutes[minute] += 1
+                guard_minutes[(siesta.guard, minute)] += 1
     return guard_minutes
 
 
@@ -71,10 +71,15 @@ sample_siestas = compute_siestas(sample_notes)
 sample_guards_sleep = compute_guard_sleep_time(sample_siestas)
 max_guard = sleepiest_guard(sample_guards_sleep)
 print("max guard:", max_guard)
-sample_minutes = sleep_minutes(sample_siestas, max_guard[0])
-max_minute = max(sample_minutes.items(), key=itemgetter(1))
-print("max minute", max_minute)
-print("solution:", max_minute[0] * max_guard[0])
+sample_minutes_max_guard = sleep_minutes(sample_siestas, max_guard[0])
+max_minute = max(sample_minutes_max_guard.items(), key=itemgetter(1))
+print("max minute of max guard", max_minute)
+print("part 1 solution:", max_minute[0] * max_guard[0])
+sample_minutes_all_guards = sleep_minutes(sample_siestas)
+max_minute_all_guards = max(sample_minutes_all_guards.items(), key=lambda kv: kv[1])
+print("max minute of all guards", max_minute_all_guards[1], "for guard", max_minute_all_guards[0][0], "at minute",
+      max_minute_all_guards[0][1])
+print("solution part 2:", max_minute_all_guards[0][0] * max_minute_all_guards[0][1])
 
 actual_notes = load_file("input.txt")
 print(actual_notes)
@@ -82,8 +87,12 @@ actual_siestas = compute_siestas(actual_notes)
 actual_guards_sleep = compute_guard_sleep_time(actual_siestas)
 max_guard = sleepiest_guard(actual_guards_sleep)
 print("max guard:", max_guard)
-actual_minutes = sleep_minutes(actual_siestas, max_guard[0])
-max_minute = max(actual_minutes.items(), key=itemgetter(1))
-print("max minute", max_minute)
-print("solution:", max_minute[0] * max_guard[0])
-pass
+actual_minutes_max_guard = sleep_minutes(actual_siestas, max_guard[0])
+max_minute = max(actual_minutes_max_guard.items(), key=itemgetter(1))
+print("max minute of max guard", max_minute)
+print("part 1 solution:", max_minute[0] * max_guard[0])
+actual_minutes_all_guards = sleep_minutes(actual_siestas)
+max_minute_all_guards = max(actual_minutes_all_guards.items(), key=lambda kv: kv[1])
+print("max minute of all guards", max_minute_all_guards[1], "for guard", max_minute_all_guards[0][0], "at minute",
+      max_minute_all_guards[0][1])
+print("solution part 2:", max_minute_all_guards[0][0] * max_minute_all_guards[0][1])
